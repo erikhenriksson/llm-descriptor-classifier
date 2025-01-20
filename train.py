@@ -119,7 +119,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
     "answerdotai/ModernBERT-base",
     problem_type="multi_label_classification",
     num_labels=len(labels),
-    torch_dtype=torch.bfloat16,  # Enable BFloat16
+    # torch_dtype=torch.bfloat16,  # Enable BFloat16
 )
 
 # Training arguments with early stopping configuration and BFloat16
@@ -137,7 +137,7 @@ training_args = TrainingArguments(
     save_steps=5000,
     save_total_limit=1,
     bf16=True,  # Enable BFloat16 training
-    bf16_full_eval=True,  # Use BFloat16 during evaluation as well
+    # bf16_full_eval=True,  # Use BFloat16 during evaluation as well
     tf32=True,  # Enable TF32
 )
 
