@@ -15,6 +15,10 @@ from sklearn.metrics import f1_score, classification_report
 import torch
 from labels import labels  # Import labels from labels.py
 
+# Enable TF32 for better performance on Ampere GPUs
+torch.backends.cuda.matmul.allow_tf32 = True
+torch.backends.cudnn.allow_tf32 = True
+
 
 # Load and prepare the data
 def load_jsonl(file_path):
@@ -110,28 +114,33 @@ def compute_metrics(eval_pred):
     }
 
 
-# Initialize model
+# Initialize model with BFloat16
 model = AutoModelForSequenceClassification.from_pretrained(
     "answerdotai/ModernBERT-base",
     problem_type="multi_label_classification",
     num_labels=len(labels),
+    torch_dtype=torch.bfloat16,  # Enable BFloat16
 )
 
-# Training arguments with early stopping configuration
+# Training arguments with early stopping configuration and BFloat16
 training_args = TrainingArguments(
     output_dir="./results",
     eval_strategy="steps",
-    eval_steps=200,
+    eval_steps=500,
     per_device_train_batch_size=8,
     per_device_eval_batch_size=8,
     num_train_epochs=10,
     load_best_model_at_end=True,
     metric_for_best_model="micro_f1",
-    greater_is_better=True,  # For F1 score, higher is better
-    save_strategy="steps",  # Save at each evaluation step
-    save_steps=200,  # Save at same frequency as evaluation
-    save_total_limit=1,  # Keep only the best model
+    greater_is_better=True,
+    save_strategy="steps",
+    save_steps=5000,
+    save_total_limit=1,
+    bf16=True,  # Enable BFloat16 training
+    bf16_full_eval=True,  # Use BFloat16 during evaluation as well
+    tf32=True,  # Enable TF32
 )
+
 
 # Initialize trainer with early stopping
 trainer = Trainer(

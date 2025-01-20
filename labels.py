@@ -4,7 +4,7 @@ labels = [
     "formal",
     "technical",
     "news",
-    "positive_mood",
+    "positive",
     "education",
     "social",
     "opinion",
