@@ -16,8 +16,8 @@ import torch
 from labels import labels  # Import labels from labels.py
 
 # Enable TF32 for better performance on Ampere GPUs
-# torch.backends.cuda.matmul.allow_tf32 = True
-# torch.backends.cudnn.allow_tf32 = True
+torch.backends.cuda.matmul.allow_tf32 = True
+torch.backends.cudnn.allow_tf32 = True
 
 
 # Load and prepare the data
@@ -62,7 +62,7 @@ tokenizer = AutoTokenizer.from_pretrained("answerdotai/ModernBERT-base")
 # Tokenization function
 def tokenize_function(examples):
     return tokenizer(
-        examples["text"], padding="max_length", truncation=True, max_length=512
+        examples["text"], padding="max_length", truncation=True, max_length=2048
     )
 
 
@@ -119,14 +119,13 @@ model = AutoModelForSequenceClassification.from_pretrained(
     "answerdotai/ModernBERT-base",
     problem_type="multi_label_classification",
     num_labels=len(labels),
-    # torch_dtype=torch.bfloat16,  # Enable BFloat16
 )
 
 # Training arguments with early stopping configuration and BFloat16
 training_args = TrainingArguments(
     output_dir="./results",
     eval_strategy="steps",
-    eval_steps=100,
+    eval_steps=500,
     per_device_train_batch_size=8,
     per_device_eval_batch_size=8,
     num_train_epochs=10,
@@ -134,17 +133,15 @@ training_args = TrainingArguments(
     metric_for_best_model="micro_f1",
     greater_is_better=True,
     save_strategy="steps",
-    save_steps=100,
+    save_steps=500,
     save_total_limit=1,
     max_grad_norm=1.0,
-    # Start with a lower learning rate for stability
-    learning_rate=5e-7,
+    learning_rate=5e-5,
     warmup_ratio=0.1,
-    # Weight decay for regularization
     weight_decay=0.01,
-    bf16=True,  # Enable BFloat16 training
+    # bf16=True,  # Enable BFloat16 training
     # bf16_full_eval=True,  # Use BFloat16 during evaluation as well
-    # tf32=True,  # Enable TF32
+    tf32=True,  # Enable TF32
 )
 
 
