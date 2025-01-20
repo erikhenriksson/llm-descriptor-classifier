@@ -121,7 +121,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 training_args = TrainingArguments(
     output_dir="./results",
     eval_strategy="steps",
-    eval_steps=1000,
+    eval_steps=200,
     per_device_train_batch_size=8,
     per_device_eval_batch_size=8,
     num_train_epochs=10,
@@ -129,7 +129,7 @@ training_args = TrainingArguments(
     metric_for_best_model="micro_f1",
     greater_is_better=True,  # For F1 score, higher is better
     save_strategy="steps",  # Save at each evaluation step
-    save_steps=1000,  # Save at same frequency as evaluation
+    save_steps=200,  # Save at same frequency as evaluation
     save_total_limit=1,  # Keep only the best model
 )
 
