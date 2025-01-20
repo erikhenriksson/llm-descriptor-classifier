@@ -126,7 +126,7 @@ model = AutoModelForSequenceClassification.from_pretrained(
 training_args = TrainingArguments(
     output_dir="./results",
     eval_strategy="steps",
-    eval_steps=500,
+    eval_steps=100,
     per_device_train_batch_size=8,
     per_device_eval_batch_size=8,
     num_train_epochs=10,
@@ -134,11 +134,11 @@ training_args = TrainingArguments(
     metric_for_best_model="micro_f1",
     greater_is_better=True,
     save_strategy="steps",
-    save_steps=5000,
+    save_steps=100,
     save_total_limit=1,
     max_grad_norm=1.0,
     # Start with a lower learning rate for stability
-    learning_rate=5e-5,
+    learning_rate=5e-7,
     warmup_ratio=0.1,
     # Weight decay for regularization
     weight_decay=0.01,
