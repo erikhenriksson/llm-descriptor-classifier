@@ -1,3 +1,6 @@
+import os
+
+os.environ["HF_HOME"] = ".hf"
 import json
 from datasets import Dataset
 from transformers import (
