@@ -16,8 +16,8 @@ import torch
 from labels import labels  # Import labels from labels.py
 
 # Enable TF32 for better performance on Ampere GPUs
-torch.backends.cuda.matmul.allow_tf32 = True
-torch.backends.cudnn.allow_tf32 = True
+# torch.backends.cuda.matmul.allow_tf32 = True
+# torch.backends.cudnn.allow_tf32 = True
 
 
 # Load and prepare the data
@@ -142,9 +142,9 @@ training_args = TrainingArguments(
     warmup_ratio=0.1,
     # Weight decay for regularization
     weight_decay=0.01,
-    # bf16=True,  # Enable BFloat16 training
+    bf16=True,  # Enable BFloat16 training
     # bf16_full_eval=True,  # Use BFloat16 during evaluation as well
-    tf32=True,  # Enable TF32
+    # tf32=True,  # Enable TF32
 )
 
 
