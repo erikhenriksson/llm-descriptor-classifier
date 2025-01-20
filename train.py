@@ -136,6 +136,12 @@ training_args = TrainingArguments(
     save_strategy="steps",
     save_steps=5000,
     save_total_limit=1,
+    max_grad_norm=1.0,
+    # Start with a lower learning rate for stability
+    learning_rate=1e-5,
+    warmup_ratio=0.1,
+    # Weight decay for regularization
+    weight_decay=0.01,
     bf16=True,  # Enable BFloat16 training
     # bf16_full_eval=True,  # Use BFloat16 during evaluation as well
     tf32=True,  # Enable TF32
